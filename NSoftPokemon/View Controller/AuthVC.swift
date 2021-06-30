@@ -51,22 +51,21 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
     
     internal func setConstraints() {
         NSLayoutConstraint.activate([
-            signInContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            signInContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            signInContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+            signInContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             signInContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             signInContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            signInContainer.heightAnchor.constraint(equalToConstant: 400),
             
             titleLabel.centerXAnchor.constraint(equalTo: signInContainer.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: signInContainer.topAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: signInContainer.topAnchor, constant: 40),
             
             usernameLabel.centerXAnchor.constraint(equalTo: signInContainer.centerXAnchor),
-            usernameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            usernameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 60),
             
             usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameTextField.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 30),
+            usernameTextField.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 60),
             
-            continueButton.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 50),
+            continueButton.bottomAnchor.constraint(equalTo: signInContainer.bottomAnchor),
             continueButton.leadingAnchor.constraint(equalTo: signInContainer.leadingAnchor, constant: 10),
             continueButton.trailingAnchor.constraint(equalTo: signInContainer.trailingAnchor, constant: -10),
             continueButton.heightAnchor.constraint(equalToConstant: 60)

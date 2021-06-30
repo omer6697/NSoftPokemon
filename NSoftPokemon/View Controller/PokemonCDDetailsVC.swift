@@ -1,32 +1,25 @@
 //
-//  PokemonDetailsVC.swift
+//  PokemonCDDetails.swift
 //  NSoftPokemon
 //
-//  Created by Omer Rahmanovic on 6/29/21.
+//  Created by Omer Rahmanovic on 6/30/21.
 //
 
 import UIKit
 import SDWebImage
 
-class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
-
+class PokemonCDDetailsVC: UIViewController, UIConfigurationProtocol {
+    
     lazy var detailsContainer = UIView()
     lazy var pokemonImage = SDAnimatedImageView()
     lazy var divider = UIView.newDivider()
     lazy var baseExperienceLabel = UILabel.newLabel("Base experience: ", false, .black, 14)
     lazy var weightLabel = UILabel.newLabel("Weight: ", false, .black, 14)
     lazy var typesLabel = UILabel.newLabel("Types: ", false, .black, 14)
-    lazy var addFavoritesButton = UIButton.newButton("Add to favorites", UIColor.init(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0))
+    lazy var removeFavoritesButton = UIButton.newButton("Remove from favorites", UIColor.init(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0))
     
-    var pokemonURL = ""
     var pokemonName = ""
-    var arr = ""
-    var pokemonTypes = [String]()
-    var pokemon = PokemonDetails() {
-        didSet {
-            print("PokemonDetailsVC \(pokemon)")
-        }
-    }
+    var pokemon = PokemonCD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,10 +30,7 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
         setNavigation()
         addSubviews()
         setConstraints()
-        
-        getPokemonData {
-            self.setUIElementsValue()
-        }
+        setUIElementsValue()
     }
     
     internal func setNavigation() {
@@ -58,7 +48,7 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
         detailsContainer.addSubview(baseExperienceLabel)
         detailsContainer.addSubview(weightLabel)
         detailsContainer.addSubview(typesLabel)
-        detailsContainer.addSubview(addFavoritesButton)
+        detailsContainer.addSubview(removeFavoritesButton)
     }
     
     internal func setConstraints() {
@@ -68,9 +58,9 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
         baseExperienceLabel.translatesAutoresizingMaskIntoConstraints = false
         weightLabel.translatesAutoresizingMaskIntoConstraints = false
         typesLabel.translatesAutoresizingMaskIntoConstraints = false
-        addFavoritesButton.translatesAutoresizingMaskIntoConstraints = false
+        removeFavoritesButton.translatesAutoresizingMaskIntoConstraints = false
         
-        addFavoritesButton.setTitleColor(.black, for: .normal)
+        removeFavoritesButton.setTitleColor(.black, for: .normal)
         
         NSLayoutConstraint.activate([
             detailsContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -100,63 +90,37 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
             typesLabel.leadingAnchor.constraint(equalTo: detailsContainer.leadingAnchor, constant: 20),
             typesLabel.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -20),
             
-            addFavoritesButton.bottomAnchor.constraint(equalTo: detailsContainer.bottomAnchor, constant: -40),
-            addFavoritesButton.leadingAnchor.constraint(equalTo: detailsContainer.leadingAnchor, constant: 60),
-            addFavoritesButton.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -60),
-            addFavoritesButton.heightAnchor.constraint(equalToConstant: 50.0),
+            removeFavoritesButton.bottomAnchor.constraint(equalTo: detailsContainer.bottomAnchor, constant: -40),
+            removeFavoritesButton.leadingAnchor.constraint(equalTo: detailsContainer.leadingAnchor, constant: 60),
+            removeFavoritesButton.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -60),
+            removeFavoritesButton.heightAnchor.constraint(equalToConstant: 50.0),
         ])
         
         addButtonAction()
     }
     
     internal func addButtonAction() {
-        addFavoritesButton.addTarget(self, action: #selector(addToFavoritesTapped), for: .touchUpInside)
+        removeFavoritesButton.addTarget(self, action: #selector(removeFromFavoritesTapped), for: .touchUpInside)
+    }
+    
+    @objc func removeFromFavoritesTapped() {
+        let pokemon = pokemon
+        PersistanceService.context.delete(pokemon)
+        PersistanceService.saveContext()
+        
+        showCustomAlert(title: "Success", message: "\(pokemonName) has been removed from favorites.", actionTitle: "OK")
     }
     
     private func setUIElementsValue() {
-        if let imageUrl = pokemon.sprites?.front_default,
-           let baseExperience = pokemon.base_experience,
-           let weight = pokemon.weight {
-            self.pokemonImage.sd_setImage(with: URL(string: imageUrl))
-            self.baseExperienceLabel.text = "Base experience: \(baseExperience)"
-            self.weightLabel.text = "Weight: \(weight)"
-        }
-        pokemon.types?.forEach({ type in
-            pokemonTypes.append((type.type?.name?.uppercased())!)
-        })
-        arr = pokemonTypes.map { (string) -> String in
-            return String(string)
-        }.joined(separator: "/")
-        
-        self.typesLabel.text = "Types: \(arr)"
-    }
-    
-    @objc func addToFavoritesTapped() {
-        print("Data Saved to CORE DATA")
-        CoreDataService.shared.savePokemonCDData(name: pokemonName, imageUrl: pokemon.sprites?.front_default, baseExperience: pokemon.base_experience, weight: pokemon.weight, types: arr)
-        showCustomAlert(title: "Success", message: "\(pokemonName) is added to your favorites!", actionTitle: "OK")
+        self.pokemonImage.sd_setImage(with: URL(string: pokemon.imageURL ?? ""))
+        self.baseExperienceLabel.text = "Base experience: \(pokemon.baseExperience)"
+        self.weightLabel.text = "Weight: \(pokemon.weight)"
+        self.typesLabel.text = "Types: \(pokemon.types ?? "")"
     }
     
     private func showCustomAlert(title: String, message: String, actionTitle: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-    }
-}
-
-extension PokemonDetailsVC {
-    private func getPokemonData(completion: @escaping ()->()) {
-        Webservice.shared.getPokemonDetails(for: pokemonURL) { result in
-            switch result {
-            case .success(let pokemon):
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.pokemon = pokemon
-                    completion()
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
     }
 }

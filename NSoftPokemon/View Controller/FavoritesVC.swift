@@ -17,15 +17,14 @@ class FavoritesVC: UIViewController, UIConfigurationProtocol {
         super.viewDidLoad()
         setupUI()
         setupTableView()
-        
         fetchFromCoreData()
-        pokemons.forEach { pokemon in
-            print(pokemon.name ?? "No name")
-            print(pokemon.imageURL!)
-            print(pokemon.baseExperience)
-            print(pokemon.weight)
-            print(pokemon.types!)
-        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setupUI()
+        setupTableView()
+        fetchFromCoreData()
+        tableView.reloadData()
     }
     
     func setupUI() {
@@ -73,6 +72,12 @@ class FavoritesVC: UIViewController, UIConfigurationProtocol {
             self.pokemons = pokemons
         }
     }
+    
+    @objc func refreshTableViewOnNotification(notification: NSNotification) {
+        setupUI()
+        setupTableView()
+        fetchFromCoreData()
+    }
 }
 
 extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
@@ -102,5 +107,9 @@ extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let vc = PokemonCDDetailsVC()
+        vc.pokemonName = pokemons[indexPath.row].name ?? "No name"
+        vc.pokemon = pokemons[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

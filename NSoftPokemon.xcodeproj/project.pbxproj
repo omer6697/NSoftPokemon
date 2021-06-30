@@ -32,6 +32,7 @@
 		1738E85A268C77FA0011746D /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1738E859268C77FA0011746D /* CoreDataService.swift */; };
 		17477C27268C882000CE04BF /* PokemonCD+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17477C25268C882000CE04BF /* PokemonCD+CoreDataClass.swift */; };
 		17477C28268C882000CE04BF /* PokemonCD+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17477C26268C882000CE04BF /* PokemonCD+CoreDataProperties.swift */; };
+		17477C2A268C974C00CE04BF /* PokemonCDDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17477C29268C974C00CE04BF /* PokemonCDDetailsVC.swift */; };
 		FE4900E46143FEC15198B2D4 /* Pods_NSoftPokemon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770DB95108ECCBEEFAEF58BC /* Pods_NSoftPokemon.framework */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,7 @@
 		1738E859268C77FA0011746D /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		17477C25268C882000CE04BF /* PokemonCD+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PokemonCD+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		17477C26268C882000CE04BF /* PokemonCD+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PokemonCD+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		17477C29268C974C00CE04BF /* PokemonCDDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCDDetailsVC.swift; sourceTree = "<group>"; };
 		770DB95108ECCBEEFAEF58BC /* Pods_NSoftPokemon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSoftPokemon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE2884A34D34177245F78385 /* Pods-NSoftPokemon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSoftPokemon.debug.xcconfig"; path = "Target Support Files/Pods-NSoftPokemon/Pods-NSoftPokemon.debug.xcconfig"; sourceTree = "<group>"; };
 		FA31887713E9901F991269F4 /* Pods-NSoftPokemon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSoftPokemon.release.xcconfig"; path = "Target Support Files/Pods-NSoftPokemon/Pods-NSoftPokemon.release.xcconfig"; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				1720004D268A3D790073A2E2 /* HomeVC.swift */,
 				1720004F268B325B0073A2E2 /* FavoritesVC.swift */,
 				17200054268B3EA30073A2E2 /* PokemonDetailsVC.swift */,
+				17477C29268C974C00CE04BF /* PokemonCDDetailsVC.swift */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
@@ -380,6 +383,7 @@
 				1720004E268A3D790073A2E2 /* HomeVC.swift in Sources */,
 				1738E85A268C77FA0011746D /* CoreDataService.swift in Sources */,
 				172000432689ECB30073A2E2 /* UIConfigurationProtocol.swift in Sources */,
+				17477C2A268C974C00CE04BF /* PokemonCDDetailsVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
