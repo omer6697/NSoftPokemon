@@ -6,11 +6,8 @@
 //
 
 import UIKit
-import Network
 
 class AuthVC: UIViewController, UIConfigurationProtocol {
-
-    let monitor = NWPathMonitor()
     
     lazy var titleLabel = UILabel.newLabel("Welcome", true, .black, 20)
     lazy var usernameLabel = UILabel.newLabel("Please enter your username:", false, .black, 15)
@@ -22,7 +19,6 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
         super.viewDidLoad()
         
         setupUI()
-//        checkForInternetConnection()
     }
 
     internal func setupUI() {
@@ -84,9 +80,6 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
         saveUsernameToKeychain()
         navigationController?.pushViewController(HomeVC(), animated: true)
     }
-    
-    // Add notification observer to observe internet connection
-    // Show alert if device is not connected to internet
 }
 
 //MARK: - Working with Keychain
