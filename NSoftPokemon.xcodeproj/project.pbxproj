@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,6 +27,11 @@
 		172EA5F926886D3100589B84 /* AuthVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172EA5F826886D3100589B84 /* AuthVC.swift */; };
 		172EA5FE26886D3400589B84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 172EA5FD26886D3400589B84 /* Assets.xcassets */; };
 		172EA60126886D3400589B84 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 172EA5FF26886D3400589B84 /* LaunchScreen.storyboard */; };
+		1738E84D268C74C10011746D /* PersistanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1738E84C268C74C10011746D /* PersistanceService.swift */; };
+		1738E850268C75480011746D /* NSoftPokemonCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1738E84E268C75480011746D /* NSoftPokemonCoreData.xcdatamodeld */; };
+		1738E85A268C77FA0011746D /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1738E859268C77FA0011746D /* CoreDataService.swift */; };
+		17477C27268C882000CE04BF /* PokemonCD+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17477C25268C882000CE04BF /* PokemonCD+CoreDataClass.swift */; };
+		17477C28268C882000CE04BF /* PokemonCD+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17477C26268C882000CE04BF /* PokemonCD+CoreDataProperties.swift */; };
 		FE4900E46143FEC15198B2D4 /* Pods_NSoftPokemon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770DB95108ECCBEEFAEF58BC /* Pods_NSoftPokemon.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +58,11 @@
 		172EA5FD26886D3400589B84 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		172EA60026886D3400589B84 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		172EA60226886D3400589B84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1738E84C268C74C10011746D /* PersistanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceService.swift; sourceTree = "<group>"; };
+		1738E84F268C75480011746D /* NSoftPokemonCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NSoftPokemonCoreData.xcdatamodel; sourceTree = "<group>"; };
+		1738E859268C77FA0011746D /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+		17477C25268C882000CE04BF /* PokemonCD+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PokemonCD+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		17477C26268C882000CE04BF /* PokemonCD+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PokemonCD+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		770DB95108ECCBEEFAEF58BC /* Pods_NSoftPokemon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSoftPokemon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE2884A34D34177245F78385 /* Pods-NSoftPokemon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSoftPokemon.debug.xcconfig"; path = "Target Support Files/Pods-NSoftPokemon/Pods-NSoftPokemon.debug.xcconfig"; sourceTree = "<group>"; };
 		FA31887713E9901F991269F4 /* Pods-NSoftPokemon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSoftPokemon.release.xcconfig"; path = "Target Support Files/Pods-NSoftPokemon/Pods-NSoftPokemon.release.xcconfig"; sourceTree = "<group>"; };
@@ -134,6 +144,7 @@
 				172EA5FD26886D3400589B84 /* Assets.xcassets */,
 				172EA5FF26886D3400589B84 /* LaunchScreen.storyboard */,
 				172EA60226886D3400589B84 /* Info.plist */,
+				1738E84E268C75480011746D /* NSoftPokemonCoreData.xcdatamodeld */,
 			);
 			path = NSoftPokemon;
 			sourceTree = "<group>";
@@ -168,6 +179,7 @@
 		172EA60B26886D9D00589B84 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				1738E84B268C74910011746D /* Persistance */,
 				172EA60C26886DA600589B84 /* Networking */,
 			);
 			path = Service;
@@ -212,13 +224,23 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		1738E84B268C74910011746D /* Persistance */ = {
+			isa = PBXGroup;
+			children = (
+				17477C25268C882000CE04BF /* PokemonCD+CoreDataClass.swift */,
+				17477C26268C882000CE04BF /* PokemonCD+CoreDataProperties.swift */,
+				1738E84C268C74C10011746D /* PersistanceService.swift */,
+				1738E859268C77FA0011746D /* CoreDataService.swift */,
+			);
+			path = Persistance;
+			sourceTree = "<group>";
+		};
 		CA08CF1F09EEE42E9F76D68C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				EE2884A34D34177245F78385 /* Pods-NSoftPokemon.debug.xcconfig */,
 				FA31887713E9901F991269F4 /* Pods-NSoftPokemon.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -343,15 +365,20 @@
 				17200053268B358F0073A2E2 /* PokemonCell.swift in Sources */,
 				1720004A268A32AA0073A2E2 /* KeychainItemAccessibility.swift in Sources */,
 				172EA5F926886D3100589B84 /* AuthVC.swift in Sources */,
+				17477C27268C882000CE04BF /* PokemonCD+CoreDataClass.swift in Sources */,
 				172EA5F526886D3100589B84 /* AppDelegate.swift in Sources */,
+				1738E84D268C74C10011746D /* PersistanceService.swift in Sources */,
 				172000452689F2810073A2E2 /* UIAlertController.swift in Sources */,
+				17477C28268C882000CE04BF /* PokemonCD+CoreDataProperties.swift in Sources */,
 				172EA5F726886D3100589B84 /* SceneDelegate.swift in Sources */,
 				17200059268B8D150073A2E2 /* WebService.swift in Sources */,
 				17200055268B3EA30073A2E2 /* PokemonDetailsVC.swift in Sources */,
 				17200050268B325B0073A2E2 /* FavoritesVC.swift in Sources */,
 				172000412689EB3D0073A2E2 /* UIButtonExtension.swift in Sources */,
 				1720005E268B8FC90073A2E2 /* URLConstants.swift in Sources */,
+				1738E850268C75480011746D /* NSoftPokemonCoreData.xcdatamodeld in Sources */,
 				1720004E268A3D790073A2E2 /* HomeVC.swift in Sources */,
+				1738E85A268C77FA0011746D /* CoreDataService.swift in Sources */,
 				172000432689ECB30073A2E2 /* UIConfigurationProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -548,6 +575,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1738E84E268C75480011746D /* NSoftPokemonCoreData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1738E84F268C75480011746D /* NSoftPokemonCoreData.xcdatamodel */,
+			);
+			currentVersion = 1738E84F268C75480011746D /* NSoftPokemonCoreData.xcdatamodel */;
+			path = NSoftPokemonCoreData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 172EA5E926886D3100589B84 /* Project object */;
 }

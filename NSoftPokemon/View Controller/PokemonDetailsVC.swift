@@ -20,6 +20,7 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
     
     var pokemonURL = ""
     var pokemonName = ""
+    var arr = ""
     var pokemonTypes = [String]()
     var pokemon = PokemonDetails() {
         didSet {
@@ -46,7 +47,7 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
         title = pokemonName
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.barTintColor = .red
-        self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         view.backgroundColor = .tertiarySystemBackground
     }
     
@@ -104,6 +105,12 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
             addFavoritesButton.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -60),
             addFavoritesButton.heightAnchor.constraint(equalToConstant: 50.0),
         ])
+        
+        addButtonAction()
+    }
+    
+    internal func addButtonAction() {
+        addFavoritesButton.addTarget(self, action: #selector(addToFavoritesTapped), for: .touchUpInside)
     }
     
     private func setUIElementsValue() {
@@ -117,11 +124,16 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
         pokemon.types?.forEach({ type in
             pokemonTypes.append((type.type?.name?.uppercased())!)
         })
-        let arr = pokemonTypes.map { (string) -> String in
+        arr = pokemonTypes.map { (string) -> String in
             return String(string)
         }.joined(separator: "/")
         
         self.typesLabel.text = arr
+    }
+    
+    @objc func addToFavoritesTapped() {
+        print("Data Saved to CORE DATA")
+        CoreDataService.shared.savePokemonCDData(name: pokemonName, imageUrl: pokemon.sprites?.front_default, baseExperience: pokemon.base_experience, weight: pokemon.weight, types: arr)
     }
 }
 
