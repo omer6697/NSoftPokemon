@@ -16,7 +16,7 @@ class PokemonCDDetailsVC: UIViewController, UIConfigurationProtocol {
     lazy var baseExperienceLabel = UILabel.newLabel("Base experience: ", false, .black, 14)
     lazy var weightLabel = UILabel.newLabel("Weight: ", false, .black, 14)
     lazy var typesLabel = UILabel.newLabel("Types: ", false, .black, 14)
-    lazy var removeFavoritesButton = UIButton.newButton("Remove from favorites", UIColor.init(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0))
+    lazy var removeFavoritesButton = UIButton.newButton("Remove from favorites", UIColor.red)
     
     var pokemonName = ""
     var pokemon = PokemonCD()
@@ -60,7 +60,7 @@ class PokemonCDDetailsVC: UIViewController, UIConfigurationProtocol {
         typesLabel.translatesAutoresizingMaskIntoConstraints = false
         removeFavoritesButton.translatesAutoresizingMaskIntoConstraints = false
         
-        removeFavoritesButton.setTitleColor(.black, for: .normal)
+        removeFavoritesButton.setTitleColor(.white, for: .normal)
         
         NSLayoutConstraint.activate([
             detailsContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
