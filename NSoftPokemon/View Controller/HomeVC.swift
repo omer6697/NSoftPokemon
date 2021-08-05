@@ -10,18 +10,8 @@ import Network
 
 class HomeVC: UIViewController, UIConfigurationProtocol {
     
+    var viewModel = HomeViewModel()
     var tableView = UITableView()
-    var username = ""
-    
-    var pokemons = PokemonsContainer() {
-        didSet {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    let monitor = NWPathMonitor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +27,7 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
         setupTableView()
         
         getPokemonData()
-        checkForInternetConnection { [weak self] status in
+        viewModel.checkForNetwork { [weak self] status in
             guard let self = self else { return }
             if status == false {
                 DispatchQueue.main.async {
@@ -52,7 +42,7 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
     internal func setNavigation() {
         getUsernameFromKeychain()
         
-        title = "Welcome \(username)"
+        title = "Welcome \(viewModel.username)"
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.barTintColor = .red
         navigationController?.navigationBar.tintColor = .white
@@ -90,26 +80,7 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
     }
     
     private func getUsernameFromKeychain() {
-        if let username = KeychainWrapper.standard.string(forKey: "UsernameKeychain") {
-            self.username = username
-        }
-    }
-    
-    private func checkForInternetConnection(completion: @escaping (Bool)->()) {
-        monitor.pathUpdateHandler = { path in
-            if path.status == .satisfied {
-                debugPrint("Device is connected to the internet!")
-                completion(true)
-            } else {
-                debugPrint("Device is not connected to the internet!")
-                completion(false)
-            }
-            
-            debugPrint("Connection is using Cellular data: \(path.isExpensive)")
-        
-        
-        let queue = DispatchQueue(label: "Monitor")
-        monitor.start(queue: queue)
+        viewModel.getUsernameFromKeychain()
     }
     
     @objc func favoritesButtonTapped() {
@@ -119,16 +90,8 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
 
 extension HomeVC {
     private func getPokemonData() {
-        Webservice.shared.getPokemons { result in
-            switch result {
-            case .success(let pokemons):
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.pokemons = pokemons
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
+        viewModel.getPokemonData {
+            self.tableView.reloadData()
         }
         tableView.reloadData()
     }
@@ -137,7 +100,7 @@ extension HomeVC {
 //MARK: - TableView delegate methods
 extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let numberOfRows = pokemons.results?.count {
+        if let numberOfRows = viewModel.pokemons.results?.count {
             return numberOfRows
         }
         return 0
@@ -145,15 +108,16 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCell") as? PokemonCell else { return UITableViewCell() }
-        cell.configureCell(pokemons.results?[indexPath.row].name)
+        cell.configureCell(viewModel.pokemons.results?[indexPath.row].name)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         var vc = PokemonDetailsVC()
-        vc.pokemonURL = pokemons.results?[indexPath.row].url ?? ""
-        vc.pokemonName = pokemons.results?[indexPath.row].name ?? "No Name"
+        vc.pokemonURL = viewModel.pokemons.results?[indexPath.row].url ?? ""
+        vc.pokemonName = viewModel.pokemons.results?[indexPath.row].name ?? "No Name"
         navigationController?.pushViewController(vc, animated: true)
     }
 }
+
