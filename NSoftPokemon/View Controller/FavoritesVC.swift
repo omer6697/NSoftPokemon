@@ -11,19 +11,19 @@ import UIKit
 class FavoritesVC: UIViewController, UIConfigurationProtocol {
     
     var tableView = UITableView()
-    var pokemons = [PokemonCD]()
+    var viewModel = FavoritesViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupTableView()
-        fetchFromCoreData()
+        viewModel.fetchFromCoreData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         setupUI()
         setupTableView()
-        fetchFromCoreData()
+        viewModel.fetchFromCoreData()
         tableView.reloadData()
     }
     
@@ -66,38 +66,31 @@ class FavoritesVC: UIViewController, UIConfigurationProtocol {
         tableView.dataSource = self
     }
     
-    private func fetchFromCoreData() {
-        CoreDataService.shared.fetchPokemonCDData { [weak self] pokemons in
-            guard let self = self else { return }
-            self.pokemons = pokemons
-        }
-    }
-    
     @objc func refreshTableViewOnNotification(notification: NSNotification) {
         setupUI()
         setupTableView()
-        fetchFromCoreData()
+        viewModel.fetchFromCoreData()
     }
 }
 
 extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return pokemons.count
+        return viewModel.pokemons.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCell") as? PokemonCell else { return UITableViewCell() }
-        cell.configureCell(pokemons[indexPath.row].name)
+        cell.configureCell(viewModel.pokemons[indexPath.row].name)
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let pokemon = pokemons[indexPath.row]
+            let pokemon = viewModel.pokemons[indexPath.row]
             PersistanceService.context.delete(pokemon)
             PersistanceService.saveContext()
             
-            pokemons.remove(at: indexPath.row)
+            viewModel.pokemons.remove(at: indexPath.row)
             
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -108,8 +101,8 @@ extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = PokemonCDDetailsVC()
-        vc.pokemonName = pokemons[indexPath.row].name ?? "No name"
-        vc.pokemon = pokemons[indexPath.row]
+        vc.pokemonName = viewModel.pokemons[indexPath.row].name ?? "No name"
+        vc.pokemon = viewModel.pokemons[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
 }
