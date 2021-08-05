@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class AuthVC: UIViewController, UIConfigurationProtocol {
     
@@ -14,6 +15,8 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
     lazy var usernameTextField = UITextField.newTextField("Tap to start typing", false)
     lazy var continueButton = UIButton.newButton("Continue", .red)
     lazy var signInContainer = UIView()
+    
+    private let viewModel = AuthViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +31,8 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
         setConstraints()
         addButtonAction()
         checkUsernameInKeychain()
+        addDoneBtnOnKeyboard()
+        removeKeyboard()
     }
     
     internal func setNavigation() {
@@ -72,13 +77,33 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
         continueButton.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
     }
     
+    private func removeKeyboard() {
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        view.addGestureRecognizer(tap)
+    }
+    
+    private func addDoneBtnOnKeyboard() {
+        let keyboardToolbar = UIToolbar()
+        keyboardToolbar.sizeToFit()
+        let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
+        keyboardToolbar.items = [flexBarButton, doneBarButton]
+        self.usernameTextField.inputAccessoryView = keyboardToolbar
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
     @objc func continueButtonTapped() {
+        debugPrint("continueButtonTapped called")
         if usernameTextField.text == "" || usernameTextField.text!.count <= 3 {
             UIAlertController.showCustomAlert(for: self, title: "Username invalid", message: "Username is required field. It must have more than 3 characters!", actionTitle: "OK")
+        } else {
+            saveUsernameToKeychain()
+            viewModel.saveUsernameToKeychain(username: usernameTextField.text, key: "UsernameKeychain")
+            navigationController?.pushViewController(HomeVC(), animated: true)
         }
-        print("continueButtonTapped called")
-        saveUsernameToKeychain()
-        navigationController?.pushViewController(HomeVC(), animated: true)
     }
 }
 
@@ -89,14 +114,14 @@ extension AuthVC {
         KeychainWrapper.standard.set(usernameTextField.text!, forKey: "UsernameKeychain")
         usernameTextField.resignFirstResponder()
         UserDefaults.standard.set(true, forKey: "UserLoggedIn")
+        viewModel.saveUsernameToKeychain(username: usernameTextField.text, key: "UsernameKeychain")
     }
     
     internal func checkUsernameInKeychain() {
-        if let username = KeychainWrapper.standard.string(forKey: "UsernameKeychain") {
-            usernameTextField.text = username
-            if UserDefaults.standard.bool(forKey: "UserLoggedIn") {
-                navigationController?.pushViewController(HomeVC(), animated: true)
-            }
+        viewModel.checkUsernameInKeychain(for: self, key: "UsernameKeychain") { [weak self] username in
+            guard let self = self else { return }
+            self.usernameTextField.text = username
+            self.navigationController?.pushViewController(HomeVC(), animated: true)
         }
     }
 }

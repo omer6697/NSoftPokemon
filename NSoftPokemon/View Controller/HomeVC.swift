@@ -106,7 +106,7 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
             }
             
             debugPrint("Connection is using Cellular data: \(path.isExpensive)")
-        }
+        
         
         let queue = DispatchQueue(label: "Monitor")
         monitor.start(queue: queue)
