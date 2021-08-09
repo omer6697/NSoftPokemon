@@ -138,7 +138,6 @@
 			children = (
 				172EA60D26886DD800589B84 /* Helpers */,
 				172EA60826886D8200589B84 /* Model */,
-				172EA60926886D8700589B84 /* View Controller */,
 				172EA60A26886D9000589B84 /* View */,
 				36541FFD26BA768400813AE3 /* View Model */,
 				172EA60B26886D9D00589B84 /* Service */,
@@ -160,7 +159,7 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		172EA60926886D8700589B84 /* View Controller */ = {
+		172EA60A26886D9000589B84 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				172EA5F826886D3100589B84 /* AuthVC.swift */,
@@ -168,13 +167,6 @@
 				1720004F268B325B0073A2E2 /* FavoritesVC.swift */,
 				17200054268B3EA30073A2E2 /* PokemonDetailsVC.swift */,
 				17477C29268C974C00CE04BF /* PokemonCDDetailsVC.swift */,
-			);
-			path = "View Controller";
-			sourceTree = "<group>";
-		};
-		172EA60A26886D9000589B84 /* View */ = {
-			isa = PBXGroup;
-			children = (
 				17200051268B35810073A2E2 /* Table View Cell */,
 			);
 			path = View;
