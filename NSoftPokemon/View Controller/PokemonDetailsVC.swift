@@ -18,15 +18,7 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
     lazy var typesLabel = UILabel.newLabel("Types: ", false, .black, 14)
     lazy var addFavoritesButton = UIButton.newButton("Add to favorites", UIColor.init(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0))
     
-    var pokemonURL = ""
-    var pokemonName = ""
-    var arr = ""
-    var pokemonTypes = [String]()
-    var pokemon = PokemonDetails() {
-        didSet {
-            print("PokemonDetailsVC \(pokemon)")
-        }
-    }
+    var viewModel = PokemonDetailsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,13 +30,13 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
         addSubviews()
         setConstraints()
         
-        getPokemonData {
+        viewModel.getPokemonData {
             self.setUIElementsValue()
         }
     }
     
     internal func setNavigation() {
-        title = pokemonName
+        title = viewModel.pokemonName
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.barTintColor = .red
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
@@ -114,49 +106,35 @@ class PokemonDetailsVC: UIViewController, UIConfigurationProtocol {
     }
     
     private func setUIElementsValue() {
-        if let imageUrl = pokemon.sprites?.front_default,
-           let baseExperience = pokemon.base_experience,
-           let weight = pokemon.weight {
+        if let imageUrl = viewModel.pokemon.sprites?.front_default,
+           let baseExperience = viewModel.pokemon.base_experience,
+           let weight = viewModel.pokemon.weight {
             self.pokemonImage.sd_setImage(with: URL(string: imageUrl))
             self.baseExperienceLabel.text = "Base experience: \(baseExperience)"
             self.weightLabel.text = "Weight: \(weight)"
         }
-        pokemon.types?.forEach({ type in
-            pokemonTypes.append((type.type?.name?.uppercased())!)
+        viewModel.pokemon.types?.forEach({ type in
+            viewModel.pokemonTypes.append((type.type?.name?.uppercased())!)
         })
-        arr = pokemonTypes.map { (string) -> String in
+        viewModel.arr = viewModel.pokemonTypes.map { (string) -> String in
             return String(string)
         }.joined(separator: "/")
         
-        self.typesLabel.text = "Types: \(arr)"
+        self.typesLabel.text = "Types: \(viewModel.arr)"
     }
     
     @objc func addToFavoritesTapped() {
-        print("Data Saved to CORE DATA")
-        CoreDataService.shared.savePokemonCDData(name: pokemonName, imageUrl: pokemon.sprites?.front_default, baseExperience: pokemon.base_experience, weight: pokemon.weight, types: arr)
-        showCustomAlert(title: "Success", message: "\(pokemonName) is added to your favorites!", actionTitle: "OK")
+        viewModel.addFavoritesTapped()
+        showCustomAlert(title: "Success", message: "\(viewModel.pokemonName) is added to your favorites!", actionTitle: "OK")
     }
     
     private func showCustomAlert(title: String, message: String, actionTitle: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-}
-
-extension PokemonDetailsVC {
-    private func getPokemonData(completion: @escaping ()->()) {
-        Webservice.shared.getPokemonDetails(for: pokemonURL) { result in
-            switch result {
-            case .success(let pokemon):
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.pokemon = pokemon
-                    completion()
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
+        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: { _ in
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
             }
-        }
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
 }

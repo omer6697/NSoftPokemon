@@ -101,8 +101,8 @@ extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = PokemonCDDetailsVC()
-        vc.pokemonName = viewModel.pokemons[indexPath.row].name ?? "No name"
-        vc.pokemon = viewModel.pokemons[indexPath.row]
+        vc.viewModel.pokemonName = viewModel.pokemons[indexPath.row].name ?? "No name"
+        vc.viewModel.pokemon = viewModel.pokemons[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
 }

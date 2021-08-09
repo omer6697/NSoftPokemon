@@ -115,8 +115,9 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         var vc = PokemonDetailsVC()
-        vc.pokemonURL = viewModel.pokemons.results?[indexPath.row].url ?? ""
-        vc.pokemonName = viewModel.pokemons.results?[indexPath.row].name ?? "No Name"
+        vc.viewModel.pokemonURL = viewModel.pokemons.results?[indexPath.row].url ?? ""
+        vc.viewModel.pokemonName = viewModel.pokemons.results?[indexPath.row].name ?? "No Name"
+        
         navigationController?.pushViewController(vc, animated: true)
     }
 }
