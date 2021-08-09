@@ -18,8 +18,7 @@ class PokemonCDDetailsVC: UIViewController, UIConfigurationProtocol {
     lazy var typesLabel = UILabel.newLabel("Types: ", false, .black, 14)
     lazy var removeFavoritesButton = UIButton.newButton("Remove from favorites", UIColor.red)
     
-    var pokemonName = ""
-    var pokemon = PokemonCD()
+    var viewModel = PokemonCDDetailsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +33,7 @@ class PokemonCDDetailsVC: UIViewController, UIConfigurationProtocol {
     }
     
     internal func setNavigation() {
-        title = pokemonName
+        title = viewModel.pokemonName
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.barTintColor = .red
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
@@ -104,23 +103,25 @@ class PokemonCDDetailsVC: UIViewController, UIConfigurationProtocol {
     }
     
     @objc func removeFromFavoritesTapped() {
-        let pokemon = pokemon
-        PersistanceService.context.delete(pokemon)
-        PersistanceService.saveContext()
-        
-        showCustomAlert(title: "Success", message: "\(pokemonName) has been removed from favorites.", actionTitle: "OK")
+        viewModel.removeFromFavoritesTapped()
+        showCustomAlert(title: "Success", message: "\(viewModel.pokemonName) has been removed from favorites.", actionTitle: "OK")
     }
     
     private func setUIElementsValue() {
-        self.pokemonImage.sd_setImage(with: URL(string: pokemon.imageURL ?? ""))
-        self.baseExperienceLabel.text = "Base experience: \(pokemon.baseExperience)"
-        self.weightLabel.text = "Weight: \(pokemon.weight)"
-        self.typesLabel.text = "Types: \(pokemon.types ?? "")"
+        self.pokemonImage.sd_setImage(with: URL(string: viewModel.pokemon.imageURL ?? ""))
+        self.baseExperienceLabel.text = "Base experience: \(viewModel.pokemon.baseExperience)"
+        self.weightLabel.text = "Weight: \(viewModel.pokemon.weight)"
+        self.typesLabel.text = "Types: \(viewModel.pokemon.types ?? "")"
     }
     
     private func showCustomAlert(title: String, message: String, actionTitle: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: nil))
+//        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: { action in
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
+        }))
         self.present(alert, animated: true, completion: nil)
     }
 }

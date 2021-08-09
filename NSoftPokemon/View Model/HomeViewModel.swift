@@ -11,28 +11,42 @@ import Network
 class HomeViewModel {
     var username = ""
     let monitor = NWPathMonitor()
+    var pokemons = PokemonsContainer()
     
     internal func checkForNetwork(completion: @escaping (Bool)->()) {
         monitor.pathUpdateHandler = { path in
-            switch path.status {
-            case .satisfied:
-                debugPrint("Device is connected!")
+            if path.status == .satisfied {
+                debugPrint("Device is connected to the internet!")
                 completion(true)
-            case .requiresConnection:
-                debugPrint("You are not connected!")
+            } else {
+                debugPrint("Device is not connected to the internet!")
                 completion(false)
-            case .unsatisfied:
-                debugPrint("Device is not connected!")
-                completion(false)
+            }
+            debugPrint("Connection is using Cellular data: \(path.isExpensive)")
+        }
+        
+        let queue = DispatchQueue(label: "Monitor")
+        monitor.start(queue: queue)
+    }
+    
+    internal func getPokemonData(completion: @escaping ()->()) {
+        Webservice.shared.getPokemons { result in
+            switch result {
+            case .success(let pokemons):
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.pokemons = pokemons
+                    completion()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
     }
     
-    internal func getPokemonData() {
-        
-    }
-    
     internal func getUsernameFromKeychain() {
-        
+        if let username = KeychainWrapper.standard.string(forKey: "UsernameKeychain") {
+            self.username = username
+        }
     }
 }
