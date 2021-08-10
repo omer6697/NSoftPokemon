@@ -31,8 +31,8 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
             guard let self = self else { return }
             if status == false {
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "No Connection", message: "You are not connected to the internet.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    let alert = UIAlertController(title: SBString.hs_alert_title, message: SBString.hs_alert_message, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: SBString.hs_alert_action, style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
             }
@@ -42,13 +42,13 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
     internal func setNavigation() {
         getUsernameFromKeychain()
         
-        title = "Welcome \(viewModel.username)"
+        title = SBString.welcome_title + " " + viewModel.username
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.barTintColor = .red
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorites", style: .plain, target: self, action: #selector(favoritesButtonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: SBString.hs_favorite_button, style: .plain, target: self, action: #selector(favoritesButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = .yellow
     }
     
@@ -114,7 +114,7 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        var vc = PokemonDetailsVC()
+        let vc = PokemonDetailsVC()
         vc.viewModel.pokemonURL = viewModel.pokemons.results?[indexPath.row].url ?? ""
         vc.viewModel.pokemonName = viewModel.pokemons.results?[indexPath.row].name ?? "No Name"
         
