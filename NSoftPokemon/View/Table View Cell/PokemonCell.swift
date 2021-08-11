@@ -14,9 +14,7 @@ class PokemonCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        self.backgroundColor = .white
-        
+            
         addSubview(cellContainer)
         addSubview(titleLabel)
         
@@ -38,6 +36,8 @@ extension PokemonCell {
     }
     
     private func configureUI() {
+        self.backgroundColor = .white
+        self.selectionStyle = .none
         cellContainer.backgroundColor = UIColor.init(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
         cellContainer.layer.cornerRadius = 10.0
         
