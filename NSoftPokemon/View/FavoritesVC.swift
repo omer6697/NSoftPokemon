@@ -33,9 +33,9 @@ class FavoritesVC: UIViewController, UIConfigurationProtocol {
     }
     
     func setNavigation() {
-        title = "Favorites"
+        title = SBString.fs_title
         view.backgroundColor = .tertiarySystemBackground
-        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: SBString.back_button, style: .plain, target: nil, action: nil)
     }
     
     func addSubviews() {

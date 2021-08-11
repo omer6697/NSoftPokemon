@@ -10,10 +10,10 @@ import SnapKit
 
 class AuthVC: UIViewController, UIConfigurationProtocol {
     
-    lazy var titleLabel = UILabel.newLabel("Welcome", true, .black, 20)
-    lazy var usernameLabel = UILabel.newLabel("Please enter your username:", false, .black, 15)
-    lazy var usernameTextField = UITextField.newTextField("Tap to start typing", false)
-    lazy var continueButton = UIButton.newButton("Continue", .red)
+    lazy var titleLabel = UILabel.newLabel(SBString.welcome_title, true, .black, 20)
+    lazy var usernameLabel = UILabel.newLabel(SBString.as_username_label, false, .black, 15)
+    lazy var usernameTextField = UITextField.newTextField(SBString.as_text_field, false)
+    lazy var continueButton = UIButton.newButton(SBString.as_continue_button, .red)
     lazy var signInContainer = UIView()
     
     private let viewModel = AuthViewModel()
@@ -25,7 +25,6 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
     }
 
     internal func setupUI() {
-        print("setupUI called")
         setNavigation()
         addSubviews()
         setConstraints()
@@ -96,9 +95,8 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
     }
     
     @objc func continueButtonTapped() {
-        debugPrint("continueButtonTapped called")
         if usernameTextField.text == "" || usernameTextField.text!.count <= 3 {
-            UIAlertController.showCustomAlert(for: self, title: "Username invalid", message: "Username is required field. It must have more than 3 characters!", actionTitle: "OK")
+            UIAlertController.showCustomAlert(for: self, title: SBString.alert_title_username_invalid, message: SBString.alert_message_username_invalid, actionTitle: SBString.alert_action_ok)
         } else {
             saveUsernameToKeychain()
             viewModel.saveUsernameToKeychain(username: usernameTextField.text, key: "UsernameKeychain")
