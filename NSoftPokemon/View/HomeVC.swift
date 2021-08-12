@@ -7,6 +7,7 @@
 
 import UIKit
 import Network
+import SnapKit
 
 class HomeVC: UIViewController, UIConfigurationProtocol {
     
@@ -58,12 +59,10 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
     
     internal func setConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        
+        tableView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalToSuperview()
+        }
     }
     
     internal func setupTableView() {

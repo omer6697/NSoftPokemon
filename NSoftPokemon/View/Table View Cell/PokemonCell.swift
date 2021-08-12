@@ -15,8 +15,7 @@ class PokemonCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
             
-        addSubview(cellContainer)
-        addSubview(titleLabel)
+        [cellContainer, titleLabel].forEach { addSubview($0) }
         
         configureUI()
         setUIConstraints()
@@ -45,21 +44,19 @@ extension PokemonCell {
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
-        
-        
     }
     
     private func setUIConstraints() {
-        cellContainer.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            cellContainer.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            cellContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            cellContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            cellContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            
-            titleLabel.centerYAnchor.constraint(equalTo: cellContainer.centerYAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: cellContainer.centerXAnchor)
-        ])
+        [cellContainer, titleLabel].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        
+        cellContainer.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
     }
 }
