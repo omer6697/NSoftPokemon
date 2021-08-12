@@ -50,26 +50,31 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
     }
     
     internal func setConstraints() {
-        NSLayoutConstraint.activate([
-            signInContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
-            signInContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            signInContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            signInContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            titleLabel.centerXAnchor.constraint(equalTo: signInContainer.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: signInContainer.topAnchor, constant: 40),
-            
-            usernameLabel.centerXAnchor.constraint(equalTo: signInContainer.centerXAnchor),
-            usernameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 60),
-            
-            usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameTextField.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 60),
-            
-            continueButton.bottomAnchor.constraint(equalTo: signInContainer.bottomAnchor),
-            continueButton.leadingAnchor.constraint(equalTo: signInContainer.leadingAnchor, constant: 10),
-            continueButton.trailingAnchor.constraint(equalTo: signInContainer.trailingAnchor, constant: -10),
-            continueButton.heightAnchor.constraint(equalToConstant: 60)
-        ])
+        signInContainer.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview().inset(80)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(40)
+        }
+        
+        usernameLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(titleLabel.snp.bottom).offset(60)
+        }
+        
+        usernameTextField.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(usernameLabel.snp.bottom).offset(60)
+        }
+        
+        continueButton.snp.makeConstraints {
+            $0.bottom.equalTo(signInContainer.snp.bottom)
+            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.height.equalTo(60)
+        }
     }
     
     internal func addButtonAction() {

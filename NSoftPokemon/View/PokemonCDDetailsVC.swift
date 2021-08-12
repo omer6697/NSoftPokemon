@@ -42,59 +42,49 @@ class PokemonCDDetailsVC: UIViewController, UIConfigurationProtocol {
     
     internal func addSubviews() {
         view.addSubview(detailsContainer)
-        detailsContainer.addSubview(pokemonImage)
-        detailsContainer.addSubview(divider)
-        detailsContainer.addSubview(baseExperienceLabel)
-        detailsContainer.addSubview(weightLabel)
-        detailsContainer.addSubview(typesLabel)
-        detailsContainer.addSubview(removeFavoritesButton)
+        [pokemonImage, divider, baseExperienceLabel, weightLabel, typesLabel, removeFavoritesButton].forEach { detailsContainer.addSubview($0) }
+        [detailsContainer, pokemonImage].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
     }
     
     internal func setConstraints() {
-        detailsContainer.translatesAutoresizingMaskIntoConstraints = false
-        pokemonImage.translatesAutoresizingMaskIntoConstraints = false
-        divider.translatesAutoresizingMaskIntoConstraints = false
-        baseExperienceLabel.translatesAutoresizingMaskIntoConstraints = false
-        weightLabel.translatesAutoresizingMaskIntoConstraints = false
-        typesLabel.translatesAutoresizingMaskIntoConstraints = false
-        removeFavoritesButton.translatesAutoresizingMaskIntoConstraints = false
         
-        removeFavoritesButton.setTitleColor(.white, for: .normal)
+        detailsContainer.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview().offset(20)
+            $0.leading.trailing.equalToSuperview()
+        }
         
-        NSLayoutConstraint.activate([
-            detailsContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            detailsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            detailsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            detailsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 20),
-            
-            pokemonImage.topAnchor.constraint(equalTo: detailsContainer.topAnchor, constant: 20),
-            pokemonImage.centerXAnchor.constraint(equalTo: detailsContainer.centerXAnchor),
-            pokemonImage.widthAnchor.constraint(equalToConstant: 120),
-            pokemonImage.heightAnchor.constraint(equalToConstant: 120),
-            
-            divider.topAnchor.constraint(equalTo: pokemonImage.bottomAnchor, constant: 20),
-            divider.leadingAnchor.constraint(equalTo: detailsContainer.leadingAnchor, constant: 20),
-            divider.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -20),
-            divider.heightAnchor.constraint(equalToConstant: 1),
-            
-            baseExperienceLabel.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 20),
-            baseExperienceLabel.leadingAnchor.constraint(equalTo: detailsContainer.leadingAnchor, constant: 20),
-            baseExperienceLabel.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -20),
-            
-            weightLabel.topAnchor.constraint(equalTo: baseExperienceLabel.bottomAnchor, constant: 20),
-            weightLabel.leadingAnchor.constraint(equalTo: detailsContainer.leadingAnchor, constant: 20),
-            weightLabel.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -20),
-            
-            typesLabel.topAnchor.constraint(equalTo: weightLabel.bottomAnchor, constant: 20),
-            typesLabel.leadingAnchor.constraint(equalTo: detailsContainer.leadingAnchor, constant: 20),
-            typesLabel.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -20),
-            
-            removeFavoritesButton.bottomAnchor.constraint(equalTo: detailsContainer.bottomAnchor, constant: -40),
-            removeFavoritesButton.leadingAnchor.constraint(equalTo: detailsContainer.leadingAnchor, constant: 60),
-            removeFavoritesButton.trailingAnchor.constraint(equalTo: detailsContainer.trailingAnchor, constant: -60),
-            removeFavoritesButton.heightAnchor.constraint(equalToConstant: 50.0),
-        ])
+        pokemonImage.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(150)
+            $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(120)
+        }
         
+        divider.snp.makeConstraints {
+            $0.top.equalTo(pokemonImage.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(1)
+        }
+        
+        baseExperienceLabel.snp.makeConstraints {
+            $0.top.equalTo(divider.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        weightLabel.snp.makeConstraints {
+            $0.top.equalTo(baseExperienceLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        typesLabel.snp.makeConstraints {
+            $0.top.equalTo(weightLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        removeFavoritesButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-80)
+            $0.leading.trailing.equalToSuperview().inset(60)
+            $0.height.equalTo(50)
+        }
         addButtonAction()
     }
     
