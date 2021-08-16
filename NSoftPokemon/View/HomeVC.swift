@@ -76,12 +76,11 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
     private func checkNetworkConnection() {
         viewModel.checkForNetwork { [weak self] status in
             guard let self = self else { return }
-            if status == false {
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: SBString.hs_alert_title, message: SBString.hs_alert_message, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: SBString.hs_alert_action, style: .default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                }
+            guard !status else { return }
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: SBString.hs_alert_title, message: SBString.hs_alert_message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: SBString.hs_alert_action, style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -93,15 +92,9 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
         activityView?.startAnimating()
     }
     
-    private func hideActivityIndicator() {
-        if activityView != nil {
-            activityView?.stopAnimating()
-        }
-    }
+    private func hideActivityIndicator() { guard activityView != nil else { return }; activityView?.stopAnimating() }
     
-    @objc func favoritesButtonTapped() {
-        navigationController?.pushViewController(FavoritesVC(), animated: true)
-    }
+    @objc func favoritesButtonTapped() { navigationController?.pushViewController(FavoritesVC(), animated: true) }
 }
 
 extension HomeVC {
