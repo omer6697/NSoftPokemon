@@ -20,7 +20,6 @@ class AuthVC: UIViewController, UIConfigurationProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUI()
     }
 
