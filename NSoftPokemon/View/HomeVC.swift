@@ -13,6 +13,7 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
     
     var viewModel = HomeViewModel()
     var tableView = UITableView()
+    var activityView: UIActivityIndicatorView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,18 +27,9 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
         addSubviews()
         setConstraints()
         setupTableView()
-        
+        showActivityIndicator()
         getPokemonData()
-        viewModel.checkForNetwork { [weak self] status in
-            guard let self = self else { return }
-            if status == false {
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: SBString.hs_alert_title, message: SBString.hs_alert_message, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: SBString.hs_alert_action, style: .default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                }
-            }
-        }
+        checkNetworkConnection()
     }
     
     internal func setNavigation() {
@@ -59,7 +51,6 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
     
     internal func setConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
         tableView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview()
         }
@@ -82,15 +73,38 @@ class HomeVC: UIViewController, UIConfigurationProtocol {
         viewModel.getUsernameFromKeychain()
     }
     
-    @objc func favoritesButtonTapped() {
-        navigationController?.pushViewController(FavoritesVC(), animated: true)
+    private func checkNetworkConnection() {
+        viewModel.checkForNetwork { [weak self] status in
+            guard let self = self else { return }
+            guard !status else { return }
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: SBString.hs_alert_title, message: SBString.hs_alert_message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: SBString.hs_alert_action, style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
+    
+    private func showActivityIndicator() {
+        activityView = UIActivityIndicatorView(style: .large)
+        activityView?.center = self.view.center
+        self.view.addSubview(activityView!)
+        activityView?.startAnimating()
+    }
+    
+    private func hideActivityIndicator() { guard activityView != nil else { return }; activityView?.stopAnimating() }
+    
+    @objc func favoritesButtonTapped() { navigationController?.pushViewController(FavoritesVC(), animated: true) }
 }
 
 extension HomeVC {
     private func getPokemonData() {
         viewModel.getPokemonData {
-            self.tableView.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+                guard let self = self else { return }
+                self.hideActivityIndicator()
+                self.tableView.reloadData()
+            }
         }
         tableView.reloadData()
     }
